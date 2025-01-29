@@ -25,4 +25,10 @@ public class CurrencyRateController {
         List<CurrencyRate> currencyRates = currencyRateService.getAllCurrencyRates();
         return ResponseEntity.ok(currencyRates);
     }
+
+    @PostMapping("/fetch")
+    public ResponseEntity<CurrencyRate> fetchAndSaveCurrencyRate(@RequestParam String fromCurrency, @RequestParam String toCurrency) {
+        CurrencyRate currencyRate = currencyRateService.fetchAndSaveCurrencyRate(fromCurrency, toCurrency);
+        return ResponseEntity.ok(currencyRate);
+    }
 }
