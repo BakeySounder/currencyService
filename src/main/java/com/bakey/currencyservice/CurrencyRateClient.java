@@ -3,6 +3,8 @@ package com.bakey.currencyservice;
 
 import com.bakey.currencyservice.models.CurrencyRate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,7 +27,8 @@ public class CurrencyRateClient {
     public CurrencyRate getCurrencyRate(String fromCurrency, String toCurrency) {
         String url = String.format("https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=%s&to_symbol=%s&apikey=%s",
                 fromCurrency, toCurrency, apiKey);
-        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+        Map<String, Object> response = restTemplate.exchange(url, HttpMethod.GET, null,
+                new ParameterizedTypeReference<Map<String, Object>>() {}).getBody();
 
         String latestDate = ((Map<String, Object>)response.get("Meta Data")).get("3. Last Refreshed").toString();
         // Извлечение курса из ответа
